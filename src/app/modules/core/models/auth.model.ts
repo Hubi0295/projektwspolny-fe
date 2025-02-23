@@ -22,6 +22,9 @@ export interface AuthResponse{
   message: string;
   code: string;
 }
+export interface LoggedInResponse extends Omit<AuthResponse,'message'>{
+  message: boolean;
+}
 export interface ResetPasswordData{
   email: string;
 }
@@ -29,4 +32,3 @@ export interface ChangePasswordData{
   password: string;
   uid: string;
 }
-

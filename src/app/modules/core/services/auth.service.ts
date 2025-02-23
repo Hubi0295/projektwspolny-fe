@@ -4,7 +4,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {
   AuthResponse,
   ChangePasswordData,
-  IUser,
+  IUser, LoggedInResponse,
   LoginData,
   RegisterData,
   ResetPasswordData
@@ -27,7 +27,11 @@ export class AuthService {
       withCredentials: true,
     });
   }
-
+  isLoggedIn(): Observable<LoggedInResponse>{
+    return this.http.get<LoggedInResponse>(`${this.apiUrl}/logged-in`,{
+      withCredentials: true,
+    });
+  }
   register(body: RegisterData): Observable<AuthResponse>{
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, body)
   }

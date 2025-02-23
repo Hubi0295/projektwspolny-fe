@@ -2,7 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormService} from "../../../core/services/form.service";
 import {PasswordsForm} from "../../../core/models/forms.model";
 import {FormControl, FormGroup} from "@angular/forms";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {AuthService} from "../../../core/services/auth.service";
+import {NotifierService} from "angular-notifier";
 
 
 
@@ -12,11 +14,14 @@ import {ActivatedRoute} from "@angular/router";
   styleUrls: ['./password-recovery-form.component.scss']
 })
 export class PasswordRecoveryFormComponent implements OnInit{
-  passwordsForm: FormGroup<PasswordsForm> = this.formService.initPasswordsForm()
+  passwordsForm: FormGroup<PasswordsForm> = this.formService.initPasswordsForm();
+  uid = '';
+  errorMessage : null | string ='';
   get controls(): PasswordsForm{
     return this.passwordsForm.controls;
   }
-  constructor(private formService: FormService, private route: ActivatedRoute) {
+  constructor(private formService: FormService, private route: ActivatedRoute, private authService: AuthService
+  , private notifierService: NotifierService, private router: Router) {
   }
   getErrorMessage(control: FormControl<string>): string{
     return this.formService.getErrorMessage(control);
@@ -24,7 +29,20 @@ export class PasswordRecoveryFormComponent implements OnInit{
   ngOnInit(): void {
     this.route.paramMap.subscribe({
       next:(param)=> {
-        console.log(param.get('uid'))
+        this.uid = param.get('uid') as string;
+      }
+    });
+  }
+
+  onPasswdChange() {
+    const {password} = this.passwordsForm.getRawValue();
+    this.authService.changePassword({password,uid: this.uid}).subscribe({
+      next: resp =>{
+        this.router.navigate(['/logowanie']);
+        this.notifierService.notify('success','Poprawnie zmienion haslo, mozesz sie zalogować');
+      },
+      error: err =>{
+        this.errorMessage = err;
       }
     });
   }
