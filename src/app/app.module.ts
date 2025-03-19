@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,6 +10,8 @@ import {AuthModule} from "./modules/auth/auth.module";
 import {authReducer} from "./modules/auth/store/auth.reducer";
 import {NotifierModule, NotifierOptions} from "angular-notifier";
 import {AuthEffects} from "./modules/auth/store/auth.effects";
+import localPL from '@angular/common/locales/pl';
+import { registerLocaleData } from '@angular/common';
 const customNotifier: NotifierOptions ={
   position: {
     horizontal: {
@@ -24,7 +26,7 @@ const customNotifier: NotifierOptions ={
   },
   theme: 'material',
 };
-
+registerLocaleData(localPL)
 @NgModule({
   declarations: [
     AppComponent
@@ -39,7 +41,12 @@ const customNotifier: NotifierOptions ={
     EffectsModule.forRoot([AuthEffects]),
     NotifierModule.withConfig(customNotifier)
   ],
-  providers: [],
+  providers: [
+    {
+      provide: LOCALE_ID,
+      useValue: 'pl',
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
