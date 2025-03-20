@@ -11,10 +11,22 @@ export class ProductsService {
   apiUrl = `${environment.apiUrl}/product`;
 
   constructor(private http: HttpClient) { }
-  getProducts(pageIndex: number =1, itemsPerPage: number=5): Observable<GetProductsResponse>{
+  getProducts(pageIndex: number =1, itemsPerPage: number=5, name: string | null = null, sortElement: string | null = null, orderElement: string | null = null, category: string | null = null): Observable<GetProductsResponse>{
     let params = new HttpParams()
       .append('_page', pageIndex)
       .append('_limit',itemsPerPage)
+    if (name) {
+      params = params.append('name_like', name)
+    }
+    if(sortElement){
+      params = params.append('_sort', sortElement)
+    }
+    if(orderElement){
+      params = params.append('_order', orderElement)
+    }
+    if(category){
+      params = params.append('_category', category)
+    }
     return this.http.get<PrimitiveProduct[]>(`${this.apiUrl}`,{
       observe: 'response',
       params
