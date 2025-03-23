@@ -8,4 +8,12 @@ import { PrimitiveProduct } from '../../../../core/models/product.model';
 })
 export class ProductComponent {
   @Input() product!: PrimitiveProduct;
+
+  getProductDetailsURL() {
+    console.log(this.product);
+    return `/produkty/${this.product.name}-${this.product.createdAt.replaceAll(
+      '-',
+      ''
+    )}`;
+  }
 }
