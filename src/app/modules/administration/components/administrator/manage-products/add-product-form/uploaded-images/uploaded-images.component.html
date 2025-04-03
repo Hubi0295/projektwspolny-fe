@@ -1,0 +1,14 @@
+<div class="d-flex justify-content-center">
+<div class="images-wrapper">
+<img [src]="activeImage" alt="Zdjecie nowego produktu" class="img-fluid main-img mx-auto d-block">
+<div class="mini-images-wrapper">
+  <div class="image-wrapper " *ngFor="let image of imageUrls">
+    <img [src]="image.url" alt="Zdjecie nowego produktu" class="img-fluid mini-image" (click)="setActiveImage(image.url)">
+    <p class="text-center delete-image" (click)="deleteImage(image.url)">Usuń</p>
+  </div>
+</div>
+
+</div>
+  <app-alert *ngIf="errorMsg" [message] = "errorMsg" [alertType]='"warning"'>
+  </app-alert>
+</div>
